@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TelephoneComponent } from './telephone/telephone.component';
 
 const routes: Routes = [
-    { path: 'telephone', component: TelephoneComponent }
+    { path: '', component: TelephoneComponent }
 ];
 
 @NgModule({

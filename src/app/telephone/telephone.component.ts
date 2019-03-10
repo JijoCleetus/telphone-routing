@@ -14,7 +14,9 @@ import { TelephoneService } from './services/telephone.service';
 export class TelephoneComponent {
   telePrefix: string;
   operators: any[];
-  dd: any;
+  numberOperator: number;
+  finalCharge = [];
+  costArray: any[];
 
   constructor(private teleService: TelephoneService) {
     this.teleService.getJSON().subscribe(data => {
@@ -23,6 +25,7 @@ export class TelephoneComponent {
         let ss = data[index];
         return ss;
       })
+      this.numberOperator = this.operators.length;
       console.log(this.operators);
     });
   }
@@ -32,7 +35,37 @@ export class TelephoneComponent {
   }
 
   onKey(event: any) {
+    this.costArray = [];
     this.telePrefix = event.target.value;
+    for (let index in this.operators) {
+      this.findLeastItems(this.operators[index], this.telePrefix, index)
+    }
+    this.findLeastCost();
+  }
 
+  findLeastCost() {
+
+  }
+
+  findLeastItems(arr, prefix, i) {
+    let tempArr = [];
+    let matchLength: String = "";
+    let nonMatchLength: String = "";
+    arr.forEach((element, index) => {
+      if (element.prefix.toString().includes(prefix)) {
+        tempArr[index] = element;
+        if (element.prefix.length === prefix.length) {
+          matchLength = matchLength + element.cost + ",";
+        } else {
+          nonMatchLength = nonMatchLength + element.cost + ",";
+        }
+      }
+    });
+    if (matchLength) {
+      this.costArray[i] = matchLength.split(",");
+    } else {
+      this.costArray[i] = nonMatchLength.split(",");
+    }
+    console.log(this.costArray);
   }
 }
